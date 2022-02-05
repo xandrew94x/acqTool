@@ -3,6 +3,7 @@ acqTool is a simple tool for self-labeling with an interface help.
 
 ## Usage
 
+![acqTool Interface](./images/acqToolPic.png)
 
 ## Launch
 ```
