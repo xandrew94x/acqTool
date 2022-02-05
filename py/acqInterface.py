@@ -12,7 +12,6 @@ import threading
 import os
 import pickle
 import uuid
-import os
 
 class Interface:
 
@@ -59,7 +58,7 @@ class Interface:
         self.stop_button.place(relx = 0.80,rely = 0.4)
 
         #class text
-        class_text_title = tk.Label(self.gui, text = "ClassName:")
+        class_text_title = tk.Label(self.gui, text = "Label name:")
         class_text_title.place(relx = 0.65,rely = 0.3)
         self.class_text = tk.Text(self.gui,width=10,height=1)
         self.class_text.pack()
