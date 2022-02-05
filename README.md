@@ -39,9 +39,9 @@ To save the changes, press the Save button.
 ```
 python acqTool.py -m modelName -t modelType
 ```
-__Note__: The current version support only _Mediapipe_ model ed _Hand_ type. This limitation is due to my use case. 
+__Note__: The current version support only [_Mediapipe_](https://github.com/google/mediapipe) model ed [_Hand_](https://google.github.io/mediapipe/solutions/hands) type. This limitation is due to my use case. 
 
-Launch this:
+To Launch correctly do:
 ```
 python acqTool.py -m Mediapipe -t Hand
 ```
