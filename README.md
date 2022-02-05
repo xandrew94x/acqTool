@@ -1,6 +1,9 @@
 # acqTool
 acqTool is a simple tool for self-labeling with an interface help.
 
+## Usage
+
+
 ## Launch
 ```
 python acqTool.py -m modelName -t modelType
