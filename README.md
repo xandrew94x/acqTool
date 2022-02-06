@@ -57,6 +57,8 @@ python acqTool.py -m Mediapipe -t Hand
 ## :mag: Project status 
 #### v0.1.1
 In this version was added the entire interface and a Mediapipe model for hand detection.
+#### v0.1.12
+Bugfix.
 ___
 
 ## :page_facing_up: License
