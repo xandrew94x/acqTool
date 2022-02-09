@@ -1,5 +1,5 @@
 # acqTool
-acqTool is a simple tool for self-labeling with an interface help.
+acqTool is a simple tool for self-labeling.
 
 ## :books: Usage
 
