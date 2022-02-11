@@ -47,9 +47,10 @@ python acqTool.py -m Mediapipe -t Hand
 ```
 
 ## :hammer: Technologies
-- Python 3.8.11
+- python 3.8.11
 - tkinter 8.6
 - opencv 4.5.5
+- mediapipe
 - threading
 - os
 - pickle
