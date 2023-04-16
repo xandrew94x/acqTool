@@ -57,9 +57,12 @@ python acqTool.py -m Mediapipe -t Hand
 
 ## :mag: Project status 
 #### v0.1.1
-Added interface and a mediapipe support for hand detection.
+- Added interface and a mediapipe support for hand detection.
 #### v0.1.12
-Bugfix.
+- Bugfix.
+#### v0.2
+- Removed bug on keypoint acquisition
+- Added recap window after save new settings
 ___
 
 ## :page_facing_up: License
