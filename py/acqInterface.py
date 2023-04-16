@@ -12,7 +12,6 @@ import threading
 import os
 import pickle
 import uuid
-import os
 
 class Interface:
 
@@ -22,7 +21,7 @@ class Interface:
         self.height = w_height
         #main gui
         self.camera_label = None
-
+        
         #setup
         self.output_type = 'pkl'
         self.output_path = os.path.abspath(os.getcwd())
@@ -37,7 +36,6 @@ class Interface:
         #thread
         self.thread = None
         self.stopEvent = None
-        
         
     def __initGUI__(self):
         self.gui = tk.Tk(className=self.window_title) 
@@ -59,7 +57,7 @@ class Interface:
         self.stop_button.place(relx = 0.80,rely = 0.4)
 
         #class text
-        class_text_title = tk.Label(self.gui, text = "ClassName:")
+        class_text_title = tk.Label(self.gui, text = "Label name:")
         class_text_title.place(relx = 0.65,rely = 0.3)
         self.class_text = tk.Text(self.gui,width=10,height=1)
         self.class_text.pack()
@@ -147,8 +145,7 @@ class Interface:
                                 command = lambda: self.save_setup(path.get("1.0",'end-1c'),type_var.get(),sequence_var.get(),ins_max_acq.get("1.0",'end-1c')))
         save_button.pack()
         save_button.place(relx = 0.45,rely = 0.7)
-    
-    
+      
     def save_setup(self,o_path,o_type,o_seq,o_max):
         try:
             self.output_path = o_path
@@ -156,7 +153,8 @@ class Interface:
             self.sequence_type = o_seq
             if o_max == '' : self.max_acq = 0
             else: self.max_acq = int(o_max)
-            print("Setup saved!",o_path,o_type,o_seq)
+            print("Setup saved!\npath: {0},\noutput_type: {1},\nsequence_type: {2},\nmax_vectors: {3}".format(o_path,o_type,o_seq,o_max))
+            messagebox.showinfo("Info", "Setup saved!\npath: {0},\noutput_type: {1},\nsequence_type: {2},\nmax_vectors: {3}".format(o_path,o_type,o_seq,o_max))
         except Exception as e:
             messagebox.showerror("Error", "Check if all parameters are correct.\n" + str(e))
 
@@ -186,7 +184,7 @@ class Interface:
                 with open(str(self.output_path) + "\\classes_" + str_id + "_" + str(len(self.output_classes)) +  ".pkl", "wb") as c_outfile:
                     print("Saving classes pikle file...")
                     pickle.dump(self.output_classes, c_outfile)                    
-                messagebox.showinfo("Info", "All output files correctly saved.")       
+                messagebox.showinfo("Info", "All output files correctly saved.")
                 self.reset_outputs()
             except Exception as e:
                 messagebox.showerror("Error", "Can't save output files.\n" + str(e))
@@ -205,7 +203,7 @@ class Interface:
             self.start_acq = False
             self.output_log['state'] = 'normal'
             self.class_text['state'] = 'normal'
-            self.output_log.insert('1.0' ,"Added: "+str(len(self.output_classes))+" vectors.\nUnique classes:"+str(set(self.output_classes)))
+            self.output_log.insert('1.0' ,"Added: "+str(len(self.output_vectors))+" vectors.\nUnique classes:"+str(set(self.output_classes)))
             if self.sequence_type == 0:
                 self.save_outputs(output_type = self.output_type)
         else:
@@ -243,7 +241,7 @@ class Interface:
                 print("Select a valid Model type.")
                 return
         except Exception as e:
-            messagebox.showerror("Error", "Error to select model type.\n", str(e))
+            messagebox.showerror("Error", "Error to select model type.\n" + str(e))
             
         self.valid_model = True
     
@@ -256,7 +254,7 @@ class Interface:
             for markers in landmark:
                 for mark in range(len(markers.landmark)):
                     vector.append(markers.landmark[mark].x*window_w)#x
-                    vector.append(markers.landmark[mark].x*window_h)#y
+                    vector.append(markers.landmark[mark].y*window_h)#y
             return vector
         else:
             print("Error to model_type.")
@@ -285,7 +283,7 @@ class Interface:
     
     def gui_camera(self):
         width, height = 360, 360
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         
@@ -293,33 +291,27 @@ class Interface:
             # keep looping over frames until instructed to stop
             while not self.stopEvent.is_set():
 
-                _, frame = self.cap.read()
-                frame = cv2.flip(frame, 1)
-                cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                
-                if self.valid_model == True:
-                    #show frame with keypoints
-                    cv2image = self.show_hand_keypoints(cv2image)
-                
-                img = Image.fromarray(cv2image)
-                imgtk = ImageTk.PhotoImage(image=img)
+                ret, frame = self.cap.read()
+                if ret:
+                    frame = cv2.flip(frame, 1)
+                    cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-                # if the panel is not None, initialize it
-                if self.camera_label is None:
-                    self.camera_label = tk.Label(self.gui)
-                    self.camera_label.pack()
-                    self.camera_label.place(relx = 0,rely = 0)
-                # otherwise, simply update
-                else:
-                    self.camera_label.configure(image=imgtk)
-                    self.camera_label.image = imgtk
+                    if self.valid_model == True:
+                        #show frame with keypoints
+                        cv2image = self.show_hand_keypoints(cv2image)
+
+                    img = Image.fromarray(cv2image)
+                    imgtk = ImageTk.PhotoImage(image=img)
+
+                    # if the panel is not None, initialize it
+                    if self.camera_label is None:
+                        self.camera_label = tk.Label(self.gui)
+                        self.camera_label.pack()
+                        self.camera_label.place(relx = 0,rely = 0)
+                    # otherwise, simply update
+                    else:
+                        self.camera_label.configure(image=imgtk)
+                        self.camera_label.image = imgtk
         except Exception as e:
             print("Camera Error.\n", str(e))
-            
-
-
-# In[ ]:
-
-
-
 
